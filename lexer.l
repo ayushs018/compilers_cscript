@@ -52,12 +52,12 @@ WS      [ \t\n\r]+
 "return"    { TRACK(); fprintf(yyout,"KEYWORD(return)\n");   return RETURN;   }
 "sizeof"    { TRACK(); fprintf(yyout,"KEYWORD(sizeof)\n");   return SIZEOF;   }
 
-{ID}    { TRACK(); fprintf(yyout,"IDENTIFIER(%s)\n",    yytext); return IDENTIFIER;    }
+{ID}    { TRACK(); fprintf(yyout,"IDENTIFIER(%s)\n",    yytext); yylval.node = create_node_with_lexeme("id", yytext); return IDENTIFIER;    }
 {HEX}   { TRACK(); fprintf(yyout,"INT_CONST(%s)\n",     yytext); return INT_CONST;     }
-{FLOAT} { TRACK(); fprintf(yyout,"FLOAT_CONST(%s)\n",   yytext); return FLOAT_CONST;   }
-{INT}   { TRACK(); fprintf(yyout,"INT_CONST(%s)\n",     yytext); return INT_CONST;     }
-{CHAR}  { TRACK(); fprintf(yyout,"CHAR_CONST(%s)\n",    yytext); return CHAR_CONST;    }
-{STRING} { TRACK(); fprintf(yyout,"STRING_LITERAL(%s)\n",yytext); return STRING_LITERAL;}
+{FLOAT} { TRACK(); fprintf(yyout,"FLOAT_CONST(%s)\n",   yytext); yylval.node = create_node_with_lexeme("float", yytext); return FLOAT_CONST;   }
+{INT}   { TRACK(); fprintf(yyout,"INT_CONST(%s)\n",     yytext); yylval.node = create_node_with_lexeme("int", yytext); return INT_CONST;     }
+{CHAR}  { TRACK(); fprintf(yyout,"CHAR_CONST(%s)\n",    yytext); yylval.node = create_node_with_lexeme("char", yytext); return CHAR_CONST;    }
+{STRING} { TRACK(); fprintf(yyout,"STRING_LITERAL(%s)\n",yytext); yylval.node = create_node_with_lexeme("string", yytext); return STRING_LITERAL;}
 
 "++"    { TRACK(); fprintf(yyout,"INC_OP\n");   return INC_OP; }
 "--"    { TRACK(); fprintf(yyout,"DEC_OP\n");   return DEC_OP; }

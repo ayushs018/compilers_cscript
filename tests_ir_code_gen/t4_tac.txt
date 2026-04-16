@@ -1,0 +1,15 @@
+
+================= THREE ADDRESS CODE =================
+
+op           arg1         arg2         result      
+=            0            -            sum         
+=            0            -            i           
+LABEL        -            -            L0          
+<            i            5            t0          
+IF_FALSE     t0           -            L1          
++            sum          i            t1          
+=            t1           -            sum         
++            i            1            t2          
+=            t2           -            i           
+GOTO         -            -            L0          
+LABEL        -            -            L1          

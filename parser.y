@@ -1,6 +1,7 @@
 %{
 #include "ast.h"
 #include "errors.h"
+#include "ir.h"
 Node* root;
 void print_parsing_table(); 
 
@@ -24,8 +25,8 @@ void yyerror(const char *s);
 %token IF ELSE FOR WHILE DO SWITCH CASE DEFAULT
 %token BREAK CONTINUE RETURN SIZEOF
 
-%token IDENTIFIER
-%token INT_CONST FLOAT_CONST CHAR_CONST STRING_LITERAL
+%token <node> IDENTIFIER
+%token <node> INT_CONST FLOAT_CONST CHAR_CONST STRING_LITERAL
 
 %token INC_OP DEC_OP PTR_OP
 %token AND_OP OR_OP
@@ -127,15 +128,30 @@ var_init_list:
     ;
 
 var_init:
+
       IDENTIFIER
-        { $$ = create_node("var_init"); }
+        { $$ = $1; }
+
     | IDENTIFIER '=' expression
-        { $$ = create_node("var_init="); add_child($$, $3); }
+        {
+            $$ = create_node("=");
+            add_child($$, create_node_with_lexeme("id", yytext));
+            add_child($$, $3);
+        }
+
     | IDENTIFIER '[' INT_CONST ']'
-        { $$ = create_node("var_init[]"); }
+        {
+            $$ = create_node("array");
+            add_child($$, create_node_with_lexeme("id", yytext));
+        }
+
     | IDENTIFIER '[' INT_CONST ']' '=' '{' expression_list '}'
-        { $$ = create_node("var_init[]="); add_child($$, $7); }
-    ;
+        {
+            $$ = create_node("array_init");
+            add_child($$, create_node_with_lexeme("id", yytext));
+            add_child($$, $7);
+        }
+;
 
 
 /* functions */
@@ -153,7 +169,10 @@ param_list:
     ;
 
 param:
-      VAR IDENTIFIER  { $$ = create_node("param"); }
+      VAR IDENTIFIER
+      {
+          $$ = $2;
+      }
     ;
 
 
@@ -206,17 +225,29 @@ assignment:
     ;
 
 lvalue:
+
       IDENTIFIER
-        { $$ = create_node("lvalue"); }
+        { $$ = $1; }
+
     | IDENTIFIER '[' expression ']'
-        { $$ = create_node("lvalue[]"); add_child($$, $3); }
+        {
+            $$ = create_node("index");
+            add_child($$, create_node_with_lexeme("id", yytext));
+            add_child($$, $3);
+        }
+
     | IDENTIFIER '.' IDENTIFIER
-        { $$ = create_node("lvalue."); }
+        { $$ = create_node("field"); }
+
     | IDENTIFIER PTR_OP IDENTIFIER
-        { $$ = create_node("lvalue->"); }
+        { $$ = create_node("ptr_field"); }
+
     | '*' IDENTIFIER
-        { $$ = create_node("lvalue*"); }
-    ;
+        {
+            $$ = create_node("deref");
+            add_child($$, create_node_with_lexeme("id", yytext));
+        }
+;
 
 /* loops */
 
@@ -278,7 +309,7 @@ logical_and_expr:
       { $$ = create_node("&&"); add_child($$,$1); add_child($$,$3); }
     | bitwise_or_expr
         { $$ = $1; }
-    ;
+    ;   
 
 bitwise_or_expr:
       bitwise_or_expr '|' bitwise_xor_expr
@@ -391,7 +422,7 @@ postfix_expr:
 
 primary_expr:
       IDENTIFIER
-        { $$ = create_node("id"); }
+        { $$ = $1; }
     | IDENTIFIER '(' argument_list ')'
         { $$ = create_node("call"); add_child($$, $3); }
     | IDENTIFIER '(' ')'
@@ -399,13 +430,13 @@ primary_expr:
     | IDENTIFIER '[' expression ']'
         { $$ = create_node("index"); add_child($$, $3); }
     | INT_CONST
-        { $$ = create_node("int"); }
+        { $$ = create_node_with_lexeme("int", yytext); }
     | FLOAT_CONST
-        { $$ = create_node("float"); }
+        { $$ = create_node_with_lexeme("float", yytext); }
     | CHAR_CONST
-        { $$ = create_node("char"); }
+        { $$ = create_node_with_lexeme("char", yytext); }
     | STRING_LITERAL
-        { $$ = create_node("string"); }
+        { $$ = create_node_with_lexeme("string", yytext); }
     | SIZEOF '(' expression ')'
         { $$ = create_node("sizeof"); add_child($$, $3); }
     | '(' expression ')'
@@ -573,10 +604,19 @@ int main(int argc, char *argv[])
 
     yyout = fopen(outname, "w");
 
+    char tacname[256];
+    strcpy(tacname, argv[1]);
+    char *dot2 = strrchr(tacname, '.');
+    if(dot2) *dot2 = '\0';
+    strcat(tacname, "_tac.txt");
+
+
     if(yyparse()==0)
     {
         printf("\nParsing Successful\n\nReverse Derivation Tree:\n");
         print_reverse_tree(root);
+        generate_ir(root); 
+        print_ir_to_file(tacname);
     }
 
 

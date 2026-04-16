@@ -6,4 +6,3 @@ func main() {
     }
 }
 
-123 0xAB 4.5 "text" 'c';

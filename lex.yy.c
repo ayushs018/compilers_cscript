@@ -930,7 +930,7 @@ YY_RULE_SETUP
 case 20:
 YY_RULE_SETUP
 #line 55 "lexer.l"
-{ TRACK(); fprintf(yyout,"IDENTIFIER(%s)\n",    yytext); return IDENTIFIER;    }
+{ TRACK(); fprintf(yyout,"IDENTIFIER(%s)\n",    yytext); yylval.node = create_node_with_lexeme("id", yytext); return IDENTIFIER;    }
 	YY_BREAK
 case 21:
 YY_RULE_SETUP
@@ -940,22 +940,22 @@ YY_RULE_SETUP
 case 22:
 YY_RULE_SETUP
 #line 57 "lexer.l"
-{ TRACK(); fprintf(yyout,"FLOAT_CONST(%s)\n",   yytext); return FLOAT_CONST;   }
+{ TRACK(); fprintf(yyout,"FLOAT_CONST(%s)\n",   yytext); yylval.node = create_node_with_lexeme("float", yytext); return FLOAT_CONST;   }
 	YY_BREAK
 case 23:
 YY_RULE_SETUP
 #line 58 "lexer.l"
-{ TRACK(); fprintf(yyout,"INT_CONST(%s)\n",     yytext); return INT_CONST;     }
+{ TRACK(); fprintf(yyout,"INT_CONST(%s)\n",     yytext); yylval.node = create_node_with_lexeme("int", yytext); return INT_CONST;     }
 	YY_BREAK
 case 24:
 YY_RULE_SETUP
 #line 59 "lexer.l"
-{ TRACK(); fprintf(yyout,"CHAR_CONST(%s)\n",    yytext); return CHAR_CONST;    }
+{ TRACK(); fprintf(yyout,"CHAR_CONST(%s)\n",    yytext); yylval.node = create_node_with_lexeme("char", yytext); return CHAR_CONST;    }
 	YY_BREAK
 case 25:
 YY_RULE_SETUP
 #line 60 "lexer.l"
-{ TRACK(); fprintf(yyout,"STRING_LITERAL(%s)\n",yytext); return STRING_LITERAL;}
+{ TRACK(); fprintf(yyout,"STRING_LITERAL(%s)\n",yytext); yylval.node = create_node_with_lexeme("string", yytext); return STRING_LITERAL;}
 	YY_BREAK
 case 26:
 YY_RULE_SETUP

@@ -1,0 +1,14 @@
+func main()
+{
+
+var i;
+var sum;
+
+sum = 0;
+
+for(i = 0; i < 5; i = i + 1)
+{
+    sum = sum + i;
+}
+
+}
