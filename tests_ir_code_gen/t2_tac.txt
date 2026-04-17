@@ -2,7 +2,10 @@
 ================= THREE ADDRESS CODE =================
 
 op           arg1         arg2         result      
-*            b            c            t0          
-*            b            c            t1          
-+            t0           t1           t2          
-=            t2           -            a           
+>            b            1            t0          
+IF_FALSE     t0           -            L0          
+=            2            -            a           
+GOTO         -            -            L1          
+LABEL        -            -            L0          
+=            3            -            c           
+LABEL        -            -            L1          

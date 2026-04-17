@@ -1,0 +1,8 @@
+
+================= THREE ADDRESS CODE =================
+
+op           arg1         arg2         result      
+*            b            c            t0          
+*            b            c            t1          
++            t0           t1           t2          
+=            t2           -            a           

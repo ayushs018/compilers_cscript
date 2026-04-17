@@ -1,0 +1,21 @@
+
+================= THREE ADDRESS CODE =================
+
+op           arg1         arg2         result      
++            c            b            t0          
+*            b            t0           t1          
+*            t1           c            t2          
+=            t2           -            a           
+LABEL        -            -            L0          
+>            b            0            t3          
+IF_FALSE     t3           -            L1          
+<            d            0            t4          
+IF_FALSE     t4           -            L2          
+-            b            1            t5          
+=            t5           -            b           
+GOTO         -            -            L3          
+LABEL        -            -            L2          
+=            0            -            b           
+LABEL        -            -            L3          
+GOTO         -            -            L0          
+LABEL        -            -            L1          

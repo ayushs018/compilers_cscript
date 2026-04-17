@@ -4,8 +4,8 @@ func main()
 var a;
 var b;
 var c;
+var d;
 
-if (b > 1) a = 2; 
-else c = 3
+a = b*c + b*d;
 
 }

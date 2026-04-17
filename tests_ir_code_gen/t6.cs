@@ -5,7 +5,6 @@ var a;
 var b;
 var c;
 
-if (b > 1) a = 2; 
-else c = 3
+a = b * -c;
 
 }

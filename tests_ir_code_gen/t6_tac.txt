@@ -1,0 +1,7 @@
+
+================= THREE ADDRESS CODE =================
+
+op           arg1         arg2         result      
+uminus       c            -            t0          
+*            b            t0           t1          
+=            t1           -            a           

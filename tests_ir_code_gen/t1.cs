@@ -5,6 +5,6 @@ var a;
 var b;
 var c;
 
-a = b * (c + b) * c;
+a = b + c;
 
 }

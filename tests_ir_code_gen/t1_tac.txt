@@ -2,7 +2,5 @@
 ================= THREE ADDRESS CODE =================
 
 op           arg1         arg2         result      
-+            c            b            t0          
-*            b            t0           t1          
-*            t1           c            t2          
-=            t2           -            a           
++            b            c            t0          
+=            t0           -            a           
